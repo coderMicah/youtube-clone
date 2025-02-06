@@ -1,6 +1,6 @@
 import { pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 
-export const usersTable = pgTable("users", {
+export const users = pgTable("users", {
     id: uuid().primaryKey().defaultRandom(),
     clerkId:text("clerk_id").unique().notNull(),
     name: text().notNull(),
