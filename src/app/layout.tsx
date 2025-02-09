@@ -1,8 +1,12 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
-import './globals.css';
+
 import { TRPCProvider } from '@/trpc/client';
+import { Toaster } from '@/components/ui/toaster';
+
+import './globals.css';
+
 
 const inter = Inter({
   variable: '--font-inter',
@@ -24,6 +28,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={`${inter.variable} font-inter`}>
           <TRPCProvider>{children}</TRPCProvider>
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>

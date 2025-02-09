@@ -1,9 +1,14 @@
-import React from 'react'
+import { DEFAULT_LIMIT } from '@/constants';
+import StudioView from '@/modules/studio/ui/view/studio-view';
+import { HydrateClient, trpc } from '@/trpc/server';
 
-const Studio = () => {
+const Studio = async () => {
+  void trpc.studio.getMany.prefetchInfinite({ limit: DEFAULT_LIMIT });
   return (
-    <div>Studio</div>
-  )
-}
+    <HydrateClient>
+      <StudioView />
+    </HydrateClient>
+  );
+};
 
-export default Studio
+export default Studio;
