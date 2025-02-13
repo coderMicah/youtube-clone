@@ -8,10 +8,22 @@ export const videosRouter = createTRPCRouter({
     create: protectedProcedure.mutation(async ({ ctx }) => {
         const { id: userId } = ctx.user
 
+        //This fn initiates a new video upload in Mux, and once Mux processes the upload,
+        //it will trigger relevant webhooks (if they are set up).
         const upload = await mux.video.uploads.create({
             new_asset_settings: {
                 passthrough: userId,
                 playback_policy: ["public"],
+                input: [
+                    {
+                        generated_subtitles: [
+                            {
+                                language_code: "en",
+                                name: "English"
+                            }
+                        ]
+                    }
+                ]
                 // mp4_support: "standard",
             },
             cors_origin: "*"
@@ -21,8 +33,8 @@ export const videosRouter = createTRPCRouter({
         const [video] = await db.insert(videos).values({
             userId: userId,
             title: "Video Title to come",
-            muxStatus: upload.status,
-            muxAssetsId: upload.id
+            muxStatus: "waiting",
+            muxUploadId: upload.id
         }).returning()
 
         return { video: video, url: upload.url }
